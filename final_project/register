@@ -1,0 +1,3 @@
+curl.exe -X POST http://localhost:5000/customer/register -d "username=percy_submit_23706" -d "password=pass123"
+
+{"message":"User successfully registered. You can now login."}

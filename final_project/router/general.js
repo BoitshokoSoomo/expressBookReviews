@@ -1,7 +1,9 @@
 const express = require('express');
+const axios = require('axios');
 let books = require('./booksdb.js');
 let users = require('./auth_users.js').users;
 const public_users = express.Router();
+const baseUrl = 'http://localhost:5000';
 
 const getBookByIsbn = (isbn) => {
   return new Promise((resolve, reject) => {
@@ -83,14 +85,19 @@ public_users.get('/review/:isbn', function (req, res) {
 });
 
 public_users.get('/async/books', async (req, res) => {
-  return res.status(200).json(books);
+  try {
+    const response = await axios.get(`${baseUrl}/`);
+    return res.status(200).json(response.data);
+  } catch (error) {
+    return res.status(500).json({ message: "Error fetching books" });
+  }
 });
 
 public_users.get('/async/isbn/:isbn', async (req, res) => {
   const isbn = req.params.isbn;
   try {
-    const book = await getBookByIsbn(isbn);
-    return res.status(200).json(book);
+    const response = await axios.get(`${baseUrl}/isbn/${isbn}`);
+    return res.status(200).json(response.data);
   } catch (error) {
     return res.status(404).json({ message: "Book not found" });
   }
@@ -99,8 +106,8 @@ public_users.get('/async/isbn/:isbn', async (req, res) => {
 public_users.get('/async/author/:author', async (req, res) => {
   const author = req.params.author;
   try {
-    const result = await getBooksByField("author", author);
-    return res.status(200).json(result);
+    const response = await axios.get(`${baseUrl}/author/${encodeURIComponent(author)}`);
+    return res.status(200).json(response.data);
   } catch (error) {
     return res.status(404).json({ message: "No books found for this author" });
   }
@@ -109,8 +116,8 @@ public_users.get('/async/author/:author', async (req, res) => {
 public_users.get('/async/title/:title', async (req, res) => {
   const title = req.params.title;
   try {
-    const result = await getBooksByField("title", title);
-    return res.status(200).json(result);
+    const response = await axios.get(`${baseUrl}/title/${encodeURIComponent(title)}`);
+    return res.status(200).json(response.data);
   } catch (error) {
     return res.status(404).json({ message: "No books found with this title" });
   }

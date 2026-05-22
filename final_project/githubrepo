@@ -1,0 +1,9 @@
+curl.exe -L https://api.github.com/repos/BoitshokoSoomo/expressBookReviews
+
+{
+    "full_name":  "BoitshokoSoomo/expressBookReviews",
+    "parent":  {
+                   "full_name":  "ibm-developer-skills-network/expressBookReview"
+               },
+    "fork":  true
+}
